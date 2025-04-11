@@ -1,0 +1,23 @@
+{
+  "name": "multivendorstore",
+  "version": "1.0.0",
+  "description": "Final Year Project",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "javascript",
+    "backend",
+    "frontend"
+  ],
+  "author": "Muzammil Nizami",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "prettier": "^3.5.3"
+  }
+}
