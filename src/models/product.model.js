@@ -9,7 +9,7 @@ const ProductSchema = new Schema({
     longTitle: String,
   },
   price: {
-    mrp: Number,
+    mrp: Number, //minimum retail price
     cost: Number,
     discount: String,
   },
