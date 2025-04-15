@@ -1,0 +1,3 @@
+[submodule "backend"]
+	path = backend
+	url = git@github.com:Muzammil-Aly/multi-vendor-store.git
