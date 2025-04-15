@@ -17,3 +17,9 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" })); // extended allo
 app.use(express.static("public")); //used it for files like pdf , images etc to store at local server
 
 app.use(cookieParser());
+
+import userRouter from "./routes/user.routes.js";
+
+app.use("/api/v1/users", userRouter);
+
+export { app };

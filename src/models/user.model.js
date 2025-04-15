@@ -11,6 +11,13 @@ const userSchema = new Schema(
       trim: true,
       index: true, // index we use for searching purpose
     },
+    fullName: {
+      type: String,
+      required: true,
+      lowercase: true,
+      trim: true,
+      index: true, // index we use for searching purpose
+    },
     email: {
       type: String,
       required: true,
@@ -28,9 +35,9 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Password is required"],
     },
-    confirmPassword: {
-      type: String,
-      required: [true, "Confirm Password is required"],
+    avatar: {
+      type: String, // cloudinary url
+      required: true,
     },
     refreshToken: {
       type: String,
@@ -66,7 +73,7 @@ const userSchema = new Schema(
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-  this.password = bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
@@ -77,12 +84,14 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 
 // jwt.sign(payload, secretOrPrivateKey, options)
 
-userSchema.methods.generateAccessToken = async function () {
+userSchema.methods.generateAccessToken = function () {
+  // we have added the function here using .methods
   return jwt.sign(
     {
-      _id: this._id,
-      username: this.username,
+      _id: this.id,
       email: this.email,
+      username: this.username,
+      fullName: this.fullName,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
@@ -91,17 +100,44 @@ userSchema.methods.generateAccessToken = async function () {
   );
 };
 
-userSchema.methods.generateRefreshToken = async function () {
+userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {
       _id: this._id,
     },
+
     process.env.REFRESH_TOKEN_SECRET,
     {
       expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
     }
   );
 };
+
+// userSchema.methods.generateAccessToken = function () {
+//   return jwt.sign(
+//     {
+//       _id: this._id,
+//       username: this.username,
+//       email: this.email,
+//     },
+//     process.env.ACCESS_TOKEN_SECRET,
+//     {
+//       expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+//     }
+//   );
+// };
+
+// userSchema.methods.generateRefreshToken = function () {
+//   return jwt.sign(
+//     {
+//       _id: this._id,
+//     },
+//     process.env.REFRESH_TOKEN_SECRET,
+//     {
+//       expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+//     }
+//   );
+// };
 
 userSchema.methods.addToCart = async function (cart) {
   try {

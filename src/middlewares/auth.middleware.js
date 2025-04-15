@@ -15,6 +15,11 @@ export const verifyJwt = asyncHandler(async (req, _, next) => {
     }
 
     const decodeToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    if (decodeToken?._id) {
+      // throw new ApiError(401, "Invalid Token: No user ID found");
+      console.log("user ID found");
+    }
+
     const user = await User.findById(decodeToken?._id).select(
       "-password -refreshToken"
     );
